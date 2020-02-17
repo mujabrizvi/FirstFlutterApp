@@ -1,7 +1,8 @@
-//import flutter helper library
+//import flutter helper libraries
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_test_app/src/widgets/imageListWidget.dart';
 import 'package:http/http.dart' show get;
 import 'ModelClasses/ImageData.dart';
 
@@ -16,6 +17,11 @@ class App extends StatefulWidget{
 //this is widget state
 class AppState extends State<App>{
   int counter= 0;
+
+  //to store the images i need a list
+  List<ImageData> imgList = [];
+
+
 //this class must extend the stateless "StatelessWidget" base class
 //must define a build method that returns
 //the widgets that *this custom widget* will show
@@ -31,7 +37,15 @@ class AppState extends State<App>{
 //here i am parsing the JSON response
     var parsedData=json.decode(response.body);
 
-    ImageData.fromJson(parsedData);
+    var ImageDataObj = ImageData.fromJson(parsedData);
+
+    // i used this because the image list is changing every time the btn is clicked
+    //so to update the list setState is called
+    setState(() {
+      imgList.add(ImageDataObj);
+    });
+
+
 
   }
 
@@ -44,7 +58,9 @@ class AppState extends State<App>{
       home:Scaffold(
 
 
-        body: Text('$counter'),
+        //Here in the body of scaffold i added my created imageview widget class
+        // and give it the list of images to render on screen
+        body: ImageListWidget(imgList),
 
         appBar: AppBar(
           title: Text("1st Flutter App Test"
@@ -66,7 +82,6 @@ class AppState extends State<App>{
 //            });
           },
         ),
-
 
       ),
 
